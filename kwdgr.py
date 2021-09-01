@@ -38,13 +38,13 @@ def get_categories(searched_nouns, keywords, n_categories=5):
     return matches
     
  def get_nouns(search_terms):
-    """
+    ""
     nltk blob tags
     NN: Noun, singular or mass
     NNS: Noun, plural
     NNP: Proper noun, singular Phrase
     NNPS: Proper noun, plural
-    """
+    ""
 
     nouns = None
     try:
