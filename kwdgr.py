@@ -11,6 +11,7 @@ from google.colab import files
 import nltk
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
+  
 
 def get_categories(searched_nouns, keywords, n_categories=5):
     """
