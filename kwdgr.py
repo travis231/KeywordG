@@ -1,5 +1,5 @@
-import streamlit as st
-import polyfuzz 
+pip install polyfuzz
+import streamlit as st 
 from polyfuzz import PolyFuzz
 import seaborn as sns
 import base64
