@@ -1,4 +1,5 @@
 import streamlit as st
+import polyfuzz 
 from polyfuzz import PolyFuzz
 import seaborn as sns
 import base64
