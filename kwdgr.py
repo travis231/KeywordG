@@ -1,4 +1,4 @@
-pip install polyfuzz
+import polyfuzz
 import streamlit as st 
 from polyfuzz import PolyFuzz
 import seaborn as sns
