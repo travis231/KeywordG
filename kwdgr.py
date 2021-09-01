@@ -69,46 +69,46 @@ def get_nouns_phrases(search_terms):
 
     return nouns
  
- def main(input_file, output_file):
-    df = pd.read_excel(input_file)
+def main(input_file, output_file):
+  df = pd.read_excel(input_file)
 
-    # clean column names
-    df.columns = df.columns.str.lower().str.strip().str.replace(" ", "_")
+  # clean column names
+  df.columns = df.columns.str.lower().str.strip().str.replace(" ", "_")
 
-    # df homogenize keywords column - currently mixed types
-    # make all strings
-    df.keywords = df.keywords.astype(str)
+  # df homogenize keywords column - currently mixed types
+  # make all strings
+  df.keywords = df.keywords.astype(str)
 
-    # row wise -- if no nouns it will be empty
-    df["nouns"] = df.apply(lambda row: get_nouns(row.keywords), axis=1)
+  # row wise -- if no nouns it will be empty
+  df["nouns"] = df.apply(lambda row: get_nouns(row.keywords), axis=1)
 
-    # duplicate record per noun for frequency count
-    df_exploded = df.explode("nouns")
+  # duplicate record per noun for frequency count
+  df_exploded = df.explode("nouns")
 
-    # TODO: before applying weights, map different keywords that mean the same thing to the unifying keyword
-    # Highest to lowest
-    weighted_keywords = df_exploded.groupby(
-        ["nouns"]
-    ).keywords.agg(["count"]).sort_values(by=["count"], ascending=False)
+  # TODO: before applying weights, map different keywords that mean the same thing to the unifying keyword
+  # Highest to lowest
+  weighted_keywords = df_exploded.groupby(
+      ["nouns"]
+  ).keywords.agg(["count"]).sort_values(by=["count"], ascending=False)
 
-    df['cat_1'], df['cat_2'], df['cat_3'], df['cat_4'], df['cat_5'] = [None, None, None]
-    df['cat_1'], df['cat_2'], df['cat_3'], df['cat_4'], df['cat_5'] = df.apply(
-         lambda row, weighted_keywords=weighted_keywords: get_categories(row.keywords, weighted_keywords),
-         lambda row: get_categories(row.keywords, weighted_keywords),
-         axis=1
-     )
-    df['results'] = df.apply(
-        lambda row, weighted_keywords=weighted_keywords: get_categories(row.keywords, weighted_keywords),
-        lambda row: get_categories(row.nouns, weighted_keywords),
-        axis=1
-    )
+  df['cat_1'], df['cat_2'], df['cat_3'], df['cat_4'], df['cat_5'] = [None, None, None]
+  df['cat_1'], df['cat_2'], df['cat_3'], df['cat_4'], df['cat_5'] = df.apply(
+       lambda row, weighted_keywords=weighted_keywords: get_categories(row.keywords, weighted_keywords),
+       lambda row: get_categories(row.keywords, weighted_keywords),
+       axis=1
+   )
+  df['results'] = df.apply(
+      lambda row, weighted_keywords=weighted_keywords: get_categories(row.keywords, weighted_keywords),
+      lambda row: get_categories(row.nouns, weighted_keywords),
+      axis=1
+  )
 
-    df[
-        ['cat_1', 'cat_2', 'cat_3', 'cat_4', 'cat_5']
-    ] = pd.DataFrame(df.results.values.tolist(), index=df.index)
+  df[
+      ['cat_1', 'cat_2', 'cat_3', 'cat_4', 'cat_5']
+  ] = pd.DataFrame(df.results.values.tolist(), index=df.index)
 
 
-    df.to_excel(output_file)
+  df.to_excel(output_file)
     
 df = pd.read_excel("/content/kwd.xlsx")
 
